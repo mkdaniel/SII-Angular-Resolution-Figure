@@ -61,14 +61,16 @@ hi=800
 ax.fill_between(range(lo, hi), [0.5 for x in range(lo, hi)], [1 for x in range(lo, hi)], interpolate=True, color="darkgrey", hatch='x', edgecolor='darkgrey', alpha=0.6, label='Lunar')
 ax.text(x=800, y=0.5, s='lunar occultation\nlimit', va='center')
 
-pltCTAS = ax.fill_between(range(400, 600), [(3600*1000*180/np.pi)*1.22*x*1e-9/68 for x in range(400, 600)], [(3600*1000*180/np.pi)*1.22*x*1e-9/2503.8 for x in range(400, 600)], interpolate=True, facecolor='blue', alpha=0.3, label='CTA-S')
-ax.text(400, 0.065, 'CTA-S', rotation=10, fontsize=18)
-pltCTAN = ax.fill_between(range(400, 600), [(3600*1000*180/np.pi)*1.22*x*1e-9/71.56 for x in range(400, 600)], [(3600*1000*180/np.pi)*1.22*x*1e-9/854.7 for x in range(400, 600)], interpolate=True, facecolor='b', alpha=0.3, label='CTA-N')
-ax.text(410, 0.2, 'CTA-N', rotation=10, fontsize=18)
+ctall=300
+ctalh=600
+pltCTAS = ax.fill_between(range(ctall, ctalh), [(3600*1000*180/np.pi)*1.22*x*1e-9/68 for x in range(ctall, ctalh)], [(3600*1000*180/np.pi)*1.22*x*1e-9/2503.8 for x in range(ctall, ctalh)], interpolate=True, facecolor='blue', alpha=0.3, label='CTA-S')
+ax.text(ctall, 0.05, 'CTA-S', rotation=10, fontsize=18)
+pltCTAN = ax.fill_between(range(ctall, ctalh), [(3600*1000*180/np.pi)*1.22*x*1e-9/71.56 for x in range(ctall, ctalh)], [(3600*1000*180/np.pi)*1.22*x*1e-9/854.7 for x in range(ctall, ctalh)], interpolate=True, facecolor='b', alpha=0.3, label='CTA-N')
+ax.text(ctall, 0.15, 'CTA-N', rotation=10, fontsize=18)
 CTA_logo = mpimg.imread('CTA_Logo.png')
-imagebox = OffsetImage(CTA_logo, zoom=0.1)
+imagebox = OffsetImage(CTA_logo, zoom=0.05)
 imagebox.image.axes = ax
-ab = AnnotationBbox(offsetbox=imagebox, xy=(300, 0.35), frameon=False)
+ab = AnnotationBbox(offsetbox=imagebox, xy=(ctall-50, 0.2), frameon=False)
 ax.add_artist(ab)
 
 pltCHARA = ax.fill_between(range(551, 2200), [(3600*1000*180/np.pi)*1.22*x*1e-9/34.07 for x in range(551, 2200)], [(3600*1000*180/np.pi)*1.22*x*1e-9/330.66 for x in range(551, 2200)], interpolate=True, facecolor='green', alpha=0.3, label='CHARA')
