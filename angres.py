@@ -167,7 +167,7 @@ GHz = np.array([90,18,6,3.6,1.3,0.7])
 AR = np.array([19,3,1,0.7,0.25,0.13])
 pltVLBI = ax2.plot(1e9*GHz/100, AR, marker='^', color='darkred', label='EVN+VLBA')
 #ax2.text(7e6, 0.35, "EVN+VLBA", rotation=30, fontsize=18)
-ax2.text(1e8, 1, "EVN+VLBA", rotation=30, fontsize=18)
+ax2.text(3e7, 1, "EVN+VLBA", rotation=30, fontsize=18, color='darkred')
 
 # EHT
 M87 = mpimg.imread('M87.jpg')
