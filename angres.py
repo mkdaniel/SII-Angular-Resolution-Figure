@@ -20,13 +20,14 @@ f, (ax, ax2) = plt.subplots(1, 2, sharey=True, figsize=(16,9))
 #f.set_figheight(9)
 #f.set_figwidth(16)
 f.subplots_adjust(left=0.075, right=0.97, top=0.96, bottom=0.085, wspace=0.04, hspace=0.2)
-ax.set_xscale("log", nonposx='clip')
+# nonpos deprecated in python3.3, now nonpositive
+ax.set_xscale("log", nonpositive='clip')
 ax2.set_xlabel(r"Wavelength $\lambda$  [nm]")
-ax.set_yscale("log", nonposy='clip')
+ax.set_yscale("log", nonpositive='clip')
 ax.set_ylabel(r"Angular Scale $\theta$ [mas]")
 ax.axis([xmin, xmax, ymin, ymax])
-ax2.set_xscale("log", nonposx='clip')
-ax2.set_yscale("log", nonposy='clip')
+ax2.set_xscale("log", nonpositive='clip')
+ax2.set_yscale("log", nonpositive='clip')
 ax2.axis([xmin, xmax, ymin, ymax])
 #f.grid(which='both')
 
@@ -38,17 +39,19 @@ ax.text(450, 6, 'NSII', rotation=90, va='center', ha='left', fontsize=18)
 
 pltVTS = ax.plot(450, 0.15*1000*3600, marker='h', color='black') # pixel PSF
 ax.text(470., 0.13*1000*3600, "IACT PSF", fontsize=18)
-ax.plot(450, 0.66, marker='.', color='black', markersize=12) # T14
-ax.plot(450, 0.9, marker='.', color='black', markersize=12) # T13
-ax.plot(450, 1.02, marker='.', color='black', markersize=12) # T23
-ax.plot(450, 1.12, marker='.', color='black', markersize=12) # T24
-ax.plot(450, 1.14, marker='.', color='black', markersize=12) # T12
-ax.plot(450, 1.39, marker='.', color='black', markersize=12) # T34
+#ax.plot(450, 0.66, marker='.', color='black', markersize=12) # T14
+#ax.plot(450, 0.9, marker='.', color='black', markersize=12) # T13
+#ax.plot(450, 1.02, marker='.', color='black', markersize=12) # T23
+#ax.plot(450, 1.12, marker='.', color='black', markersize=12) # T24
+#ax.plot(450, 1.14, marker='.', color='black', markersize=12) # T12
+#ax.plot(450, 1.39, marker='.', color='black', markersize=12) # T34
 VTS_logo = mpimg.imread('VERITAS_logo.png')
 imagebox = OffsetImage(VTS_logo, zoom=0.1)
 imagebox.image.axes = ax
-ab = AnnotationBbox(offsetbox=imagebox, xy=(450, 0.5*(0.66+1.39)), frameon=False)
+ab = AnnotationBbox(offsetbox=imagebox, xy=(400, 0.5*(0.66+1.39)), frameon=False)
 ax.add_artist(ab)
+pltVTS = ax.fill_between(range(350, 600), [(3600*1000*180/np.pi)*1.22*x*1e-9/63.2 for x in range(350, 600)], [(3600*1000*180/np.pi)*1.22*x*1e-9/172.9 for x in range(350, 600)], interpolate=True, facecolor='purple', label='VTS-SII', alpha=0.75)
+#ax.text(420, (3600*1000*180/np.pi)*1.22*420e-9/182.9, 'VSII', rotation=10, fontsize=18, color='white', zorder=1, va='bottom')
 
 # asteroid occultations
 plImprinetta = ax.errorbar(470, 0.125, xerr=60, yerr=[[0.021], [0.022]], fmt='*', color='black', markersize=12, label='Imprinetta')
@@ -59,19 +62,19 @@ ax.text(x=540, y=0.1, s='asteroid occultations')
 lo=370
 hi=800
 ax.fill_between(range(lo, hi), [0.5 for x in range(lo, hi)], [1 for x in range(lo, hi)], interpolate=True, color="darkgrey", hatch='x', edgecolor='darkgrey', alpha=0.6, label='Lunar')
-ax.text(x=800, y=0.5, s='lunar occultation\nlimit', va='center')
+ax.text(x=800, y=0.5, s='lunar occultations', va='baseline')
 
 ctall=300
 ctalh=600
 pltCTAS = ax.fill_between(range(ctall, ctalh), [(3600*1000*180/np.pi)*1.22*x*1e-9/68 for x in range(ctall, ctalh)], [(3600*1000*180/np.pi)*1.22*x*1e-9/2503.8 for x in range(ctall, ctalh)], interpolate=True, facecolor='blue', alpha=0.3, label='CTA-S')
-ax.text(ctall, 0.05, 'CTA-S', rotation=10, fontsize=18)
+#ax.text(ctall, 0.05, 'CTA-S', rotation=10, fontsize=18)
 pltCTAN = ax.fill_between(range(ctall, ctalh), [(3600*1000*180/np.pi)*1.22*x*1e-9/71.56 for x in range(ctall, ctalh)], [(3600*1000*180/np.pi)*1.22*x*1e-9/854.7 for x in range(ctall, ctalh)], interpolate=True, facecolor='b', alpha=0.3, label='CTA-N')
-ax.text(ctall, 0.15, 'CTA-N', rotation=10, fontsize=18)
+#ax.text(ctall, 0.15, 'CTA-N', rotation=10, fontsize=18)
 CTA_logo = mpimg.imread('CTA_Logo.png')
 imagebox = OffsetImage(CTA_logo, zoom=0.05)
 imagebox.image.axes = ax
-ab = AnnotationBbox(offsetbox=imagebox, xy=(ctall-50, 0.2), frameon=False)
-ax.add_artist(ab)
+ab = AnnotationBbox(offsetbox=imagebox, xy=(ctall+50, 0.2), frameon=False)
+ax.add_artist(ab) # change from ctall-50
 
 pltCHARA = ax.fill_between(range(551, 2200), [(3600*1000*180/np.pi)*1.22*x*1e-9/34.07 for x in range(551, 2200)], [(3600*1000*180/np.pi)*1.22*x*1e-9/330.66 for x in range(551, 2200)], interpolate=True, facecolor='green', alpha=0.3, label='CHARA')
 ax.text(700., 2.5, "CHARA", va='baseline', ha='left', rotation=10, fontsize=18)
@@ -172,10 +175,14 @@ pltVLBI = ax2.plot(1e9*GHz/100, AR, marker='^', color='darkred', label='EVN+VLBA
 ax2.text(3e7, 1, "EVN+VLBA", rotation=30, fontsize=18, color='darkred')
 
 # EHT
-M87 = mpimg.imread('M87.jpg')
-imagebox = OffsetImage(M87, zoom=0.2)
+#M87 = mpimg.imread('M87.jpg')
+# Sgr A*
+# https://iopscience.iop.org/article/10.3847/2041-8213/ac6674
+EHT = mpimg.imread('SgrA.jpg')
+imagebox = OffsetImage(EHT, zoom=0.18)
 imagebox.image.axes = ax2
-ab = AnnotationBbox(offsetbox=imagebox, xy=(6.5e5, 0.047), frameon=False)
+#ab = AnnotationBbox(offsetbox=imagebox, xy=(6.5e5, 0.047), frameon=False) # M87 image
+ab = AnnotationBbox(offsetbox=imagebox, xy=(6.5e5, 0.055), frameon=False) # Sgr A* image
 ab.set_zorder(1)
 ax2.add_artist(ab)
 # https://eventhorizontelescope.org/technology
@@ -196,7 +203,8 @@ ax2.plot(b, 19e-3, marker='d', color='white', markersize=8) # LMT - SMT
 ax2.plot(a, 23e-3, marker='d', color='white', markersize=8) # LMT - SMT
 ax2.plot(b, 15e-3, marker='d', color='white', markersize=8) # LMT - SMT
 #ax2.text(9.5e5, 50e-3, "EHT", rotation=90, color='white', fontsize=18)
-ax2.text(1e6, 1.1e-2, "EHT", color='white', fontsize=18)
+#ax2.text(1e6, 1.1e-2, "EHT", color='white', fontsize=18)
+ax2.text(3e5, 1.1e-2, "EHT", color='white', fontsize=18)
 
 #ax.plot(pts)
 #ax2.plot(pts)
@@ -225,11 +233,15 @@ ax2.plot((-d, +d), (1-d, 1+d), **kwargs) # bottom left diagonal
 ax2.plot((-d, +d), (-d, +d), **kwargs) # top right diagonal
 
 xmin=150
-xmax=450
+xmax=420
 pl1m = ax.hlines(y=113.24, xmin=xmin, xmax=xmax, label='1m', linestyle='-')
+ax.plot((300, 600), (1000*3600*np.degrees(1.22*300e-9/1), 1000*3600*np.degrees(1.22*600e-9/1)), 'k-')
 pl10m = ax.hlines(y=11.324, xmin=xmin, xmax=xmax, label='10m', linestyle='-.')
+ax.plot((300, 600), (1000*3600*np.degrees(1.22*300e-9/10), 1000*3600*np.degrees(1.22*600e-9/10)), 'k-.')
 pl1100m = ax.hlines(y=1.1324, xmin=xmin, xmax=xmax, label='100m', linestyle='--')
+ax.plot((300, 600), (1000*3600*np.degrees(1.22*300e-9/100), 1000*3600*np.degrees(1.22*600e-9/100)), 'k--')
 pl1km = ax.hlines(y=0.11, xmin=xmin, xmax=xmax, label='1km', linestyle=':')
+ax.plot((300, 600), (1000*3600*np.degrees(1.22*300e-9/10), 1000*3600*np.degrees(1.22*600e-9/10)), 'k:')
 ax.text(xmin, 500, r'$\theta \propto \lambda / d$')
 ax.text(xmin, 115, "d=1m", fontsize=12)
 ax.text(xmin, 12, "d=10m", fontsize=12)
